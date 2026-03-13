@@ -5,37 +5,70 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ─── CAROUSEL ───
+    // ─── CAROUSEL — Infinite Loop (clone technique) ───
+    // Structure after cloning:
+    // [clone-last | slide0 | slide1 | ... | slide(N-1) | clone-first]
+    //  pos=0        pos=1   pos=2          pos=N         pos=N+1
+    // When arriving at pos=0  → snap instantly to pos=N  (same visual = last slide)
+    // When arriving at pos=N+1→ snap instantly to pos=1  (same visual = first slide)
+
     const track = document.getElementById('carouselTrack');
-    const slides = track.children;
-    const totalSlides = slides.length;
-    const dotsContainer = document.getElementById('carouselDots');
+    const dotsContainer  = document.getElementById('carouselDots');
     const slideCurrentNum = document.getElementById('slideCurrentNum');
     const slideTotalNum   = document.getElementById('slideTotalNum');
     const progressFill    = document.getElementById('carouselProgressFill');
     const AUTOPLAY_MS     = 5500;
-    let currentSlide = 0;
+
+    // Grab originals BEFORE cloning
+    const origSlides  = Array.from(track.children);
+    const totalSlides = origSlides.length;
+
+    // Prepend clone of last slide, append clone of first slide
+    track.insertBefore(origSlides[totalSlides - 1].cloneNode(true), origSlides[0]);
+    track.appendChild(origSlides[0].cloneNode(true));
+
+    let pos = 1; // position 1 = real slide 0
     let autoplayInterval;
 
-    // Init counter totals
     function pad2(n) { return String(n).padStart(2, '0'); }
     if (slideTotalNum) slideTotalNum.textContent = pad2(totalSlides);
 
+    // Build dots (one per real slide)
     for (let i = 0; i < totalSlides; i++) {
         const dot = document.createElement('span');
         dot.classList.add('dot');
-        if (i === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => { goToSlide(i); resetAutoplay(); });
+        dot.addEventListener('click', () => { moveTo(i + 1); resetAutoplay(); });
         dotsContainer.appendChild(dot);
     }
     const dots = dotsContainer.querySelectorAll('.dot');
 
-    // Animate progress bar from 0→100% over AUTOPLAY_MS
+    // Real 0-based index from track position
+    function realIdx(p) { return ((p - 1) % totalSlides + totalSlides) % totalSlides; }
+
+    function updateUI(p) {
+        const ri = realIdx(p);
+        dots.forEach((d, i) => d.classList.toggle('active', i === ri));
+        if (slideCurrentNum) slideCurrentNum.textContent = pad2(ri + 1);
+    }
+
+    // Move track: animated = with CSS transition / false = instant snap
+    function setPos(p, animated) {
+        if (!animated) {
+            track.style.transition = 'none';
+            track.style.transform  = `translateX(-${p * 100}%)`;
+            track.offsetHeight; // force reflow so 'none' is applied before next paint
+        } else {
+            track.style.transition = '';
+            track.style.transform  = `translateX(-${p * 100}%)`;
+        }
+        pos = p;
+    }
+
+    // Progress bar: fill 0→100% over AUTOPLAY_MS
     function startProgressBar() {
         if (!progressFill) return;
         progressFill.style.transition = 'none';
         progressFill.style.width = '0%';
-        // Double rAF to ensure browser paints the reset first
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 progressFill.style.transition = `width ${AUTOPLAY_MS}ms linear`;
@@ -44,38 +77,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function goToSlide(index) {
-        currentSlide = index;
-        track.style.transform = `translateX(-${index * 100}%)`;
-        dots.forEach((d, i) => d.classList.toggle('active', i === index));
-        if (slideCurrentNum) slideCurrentNum.textContent = pad2(index + 1);
+    // Navigate to a position with animation + update UI
+    function moveTo(newPos) {
+        setPos(newPos, true);
+        updateUI(newPos);
         startProgressBar();
     }
 
-    document.getElementById('nextBtn').addEventListener('click', () => {
-        goToSlide((currentSlide + 1) % totalSlides);
-        resetAutoplay();
-    });
-    document.getElementById('prevBtn').addEventListener('click', () => {
-        goToSlide((currentSlide - 1 + totalSlides) % totalSlides);
-        resetAutoplay();
+    // After CSS transition ends: if we're on a clone, snap to the real slide
+    track.addEventListener('transitionend', (e) => {
+        if (e.propertyName !== 'transform') return;
+        if (pos === 0)              setPos(totalSlides, false); // was clone-last → jump to real last
+        if (pos === totalSlides + 1) setPos(1, false);          // was clone-first → jump to real first
     });
 
-    function startAutoplay() { autoplayInterval = setInterval(() => goToSlide((currentSlide + 1) % totalSlides), AUTOPLAY_MS); }
+    // Autoplay
+    function startAutoplay() { autoplayInterval = setInterval(() => moveTo(pos + 1), AUTOPLAY_MS); }
     function resetAutoplay() { clearInterval(autoplayInterval); startAutoplay(); }
 
-    // Kick off: show slide 0 + start progress + start autoplay
-    goToSlide(0);
+    // Init
+    setPos(1, false);
+    updateUI(1);
+    startProgressBar();
     startAutoplay();
+
+    // Buttons
+    document.getElementById('nextBtn').addEventListener('click', () => { moveTo(pos + 1); resetAutoplay(); });
+    document.getElementById('prevBtn').addEventListener('click', () => { moveTo(pos - 1); resetAutoplay(); });
 
     // Touch / Swipe
     let touchStartX = 0;
     const viewport = document.querySelector('.carousel-viewport');
-    viewport.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+    viewport.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
     viewport.addEventListener('touchend', e => {
         const diff = touchStartX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 50) {
-            diff > 0 ? goToSlide((currentSlide + 1) % totalSlides) : goToSlide((currentSlide - 1 + totalSlides) % totalSlides);
+            diff > 0 ? moveTo(pos + 1) : moveTo(pos - 1);
             resetAutoplay();
         }
     });

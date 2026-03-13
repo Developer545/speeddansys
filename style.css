@@ -731,7 +731,7 @@ img {
 
 .carousel-track {
     display: flex;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .carousel-slide {
@@ -2347,11 +2347,6 @@ img {
     .testimonials-grid {
         grid-template-columns: 1fr;
     }
-}
-
-/* ─── CAROUSEL — Easing Premium ─── */
-.carousel-track {
-    transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
 }
 
 /* ─── STATS — 2×2 en tablet ─── */
