@@ -239,71 +239,93 @@
     </section>
 
     <!-- ═══ PRODUCTO (Carousel) ═══ -->
-    <section id="producto" class="section section-dark">
+    <section id="producto" class="section section-producto">
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">PRODUCTO</span>
-                <h2>El sistema <span class="text-orange">por dentro</span></h2>
+                <h2 class="text-white">El sistema <span class="text-orange">por dentro</span></h2>
+                <p class="section-desc text-muted-white">Explora cada módulo — desde el dashboard hasta los reportes fiscales.</p>
             </div>
             <div class="carousel" id="carousel">
                 <div class="carousel-viewport">
                     <div class="carousel-track" id="carouselTrack">
                         <div class="carousel-slide">
                             <img src="assets/carousel_office_orange.png" alt="Gestión Corporativa">
-                            <div class="slide-info"><span class="slide-tag">Empresarial</span>
+                            <div class="slide-info">
+                                <span class="slide-tag">Empresarial</span>
                                 <h3>Gestión Corporativa</h3>
                                 <p>Software inteligente para la toma de decisiones con un diseño corporativo.</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
                             <img src="assets/1.jpg" alt="Login Seguro" loading="lazy">
-                            <div class="slide-info"><span class="slide-tag">Seguridad</span>
+                            <div class="slide-info">
+                                <span class="slide-tag">Seguridad</span>
                                 <h3>Acceso Seguro</h3>
                                 <p>Autenticación robusta y gestión de acceso basada en roles definidos.</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
                             <img src="assets/2.jpg" alt="Dashboard Ejecutivo" loading="lazy">
-                            <div class="slide-info"><span class="slide-tag">Dashboard</span>
+                            <div class="slide-info">
+                                <span class="slide-tag">Dashboard</span>
                                 <h3>Panel Ejecutivo</h3>
                                 <p>Analíticas, KPIs y alertas de negocio actualizadas en tiempo real.</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
                             <img src="assets/8.jpg" alt="Facturación" loading="lazy">
-                            <div class="slide-info"><span class="slide-tag">DTE</span>
+                            <div class="slide-info">
+                                <span class="slide-tag">DTE</span>
                                 <h3>Facturación Electrónica</h3>
                                 <p>Gestión de CCF, Facturas y Notas autorizadas por el Ministerio de Hacienda.</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
                             <img src="assets/5.jpg" alt="Reportes" loading="lazy">
-                            <div class="slide-info"><span class="slide-tag">Reportes</span>
+                            <div class="slide-info">
+                                <span class="slide-tag">Reportes</span>
                                 <h3>Informes Financieros</h3>
                                 <p>Generación de reportes detallados y libros del IVA para fácil auditoría.</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
                             <img src="assets/11.jpg" alt="Punto de Venta" loading="lazy">
-                            <div class="slide-info"><span class="slide-tag">POS</span>
+                            <div class="slide-info">
+                                <span class="slide-tag">POS</span>
                                 <h3>Puntos de Venta (POS)</h3>
                                 <p>Caja rápida con soporte para múltiples terminales locales.</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
                             <img src="assets/carousel_tech_orange.png" alt="Tecnología">
-                            <div class="slide-info"><span class="slide-tag">Disponibilidad</span>
+                            <div class="slide-info">
+                                <span class="slide-tag">Disponibilidad</span>
                                 <h3>Siempre Disponible</h3>
                                 <p>Infraestructura de alto rendimiento con 99% de disponibilidad para que tu negocio nunca se detenga.</p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Botones DENTRO de la imagen -->
+                    <button class="carousel-btn carousel-prev" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="carousel-btn carousel-next" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+
+                    <!-- Dots DENTRO de la imagen -->
+                    <div class="carousel-dots" id="carouselDots"></div>
+
+                    <!-- Contador de slide -->
+                    <div class="carousel-counter">
+                        <span id="slideCurrentNum">01</span>
+                        <span class="counter-slash">/</span>
+                        <span id="slideTotalNum">07</span>
+                    </div>
+
+                    <!-- Barra de progreso autoplay -->
+                    <div class="carousel-progress">
+                        <div class="carousel-progress-fill" id="carouselProgressFill"></div>
+                    </div>
                 </div>
-                <button class="carousel-btn carousel-prev" id="prevBtn"><i
-                        class="fa-solid fa-chevron-left"></i></button>
-                <button class="carousel-btn carousel-next" id="nextBtn"><i
-                        class="fa-solid fa-chevron-right"></i></button>
-                <div class="carousel-dots" id="carouselDots"></div>
             </div>
         </div>
     </section>

@@ -10,22 +10,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = track.children;
     const totalSlides = slides.length;
     const dotsContainer = document.getElementById('carouselDots');
+    const slideCurrentNum = document.getElementById('slideCurrentNum');
+    const slideTotalNum   = document.getElementById('slideTotalNum');
+    const progressFill    = document.getElementById('carouselProgressFill');
+    const AUTOPLAY_MS     = 5500;
     let currentSlide = 0;
     let autoplayInterval;
+
+    // Init counter totals
+    function pad2(n) { return String(n).padStart(2, '0'); }
+    if (slideTotalNum) slideTotalNum.textContent = pad2(totalSlides);
 
     for (let i = 0; i < totalSlides; i++) {
         const dot = document.createElement('span');
         dot.classList.add('dot');
         if (i === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => goToSlide(i));
+        dot.addEventListener('click', () => { goToSlide(i); resetAutoplay(); });
         dotsContainer.appendChild(dot);
     }
     const dots = dotsContainer.querySelectorAll('.dot');
+
+    // Animate progress bar from 0→100% over AUTOPLAY_MS
+    function startProgressBar() {
+        if (!progressFill) return;
+        progressFill.style.transition = 'none';
+        progressFill.style.width = '0%';
+        // Double rAF to ensure browser paints the reset first
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                progressFill.style.transition = `width ${AUTOPLAY_MS}ms linear`;
+                progressFill.style.width = '100%';
+            });
+        });
+    }
 
     function goToSlide(index) {
         currentSlide = index;
         track.style.transform = `translateX(-${index * 100}%)`;
         dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        if (slideCurrentNum) slideCurrentNum.textContent = pad2(index + 1);
+        startProgressBar();
     }
 
     document.getElementById('nextBtn').addEventListener('click', () => {
@@ -37,8 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
         resetAutoplay();
     });
 
-    function startAutoplay() { autoplayInterval = setInterval(() => goToSlide((currentSlide + 1) % totalSlides), 5000); }
+    function startAutoplay() { autoplayInterval = setInterval(() => goToSlide((currentSlide + 1) % totalSlides), AUTOPLAY_MS); }
     function resetAutoplay() { clearInterval(autoplayInterval); startAutoplay(); }
+
+    // Kick off: show slide 0 + start progress + start autoplay
+    goToSlide(0);
     startAutoplay();
 
     // Touch / Swipe
