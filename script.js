@@ -129,6 +129,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('navLinks').classList.toggle('open');
     });
 
+    // Cerrar menú mobile al hacer click fuera
+    document.addEventListener('click', (e) => {
+        const navLinks = document.getElementById('navLinks');
+        const hamburger = document.getElementById('hamburger');
+        if (navLinks.classList.contains('open') &&
+            !navLinks.contains(e.target) &&
+            !hamburger.contains(e.target)) {
+            navLinks.classList.remove('open');
+        }
+    });
+
 
     // ─── PLAN SELECTOR ───
     const planCards = document.querySelectorAll('.plan-card');
@@ -164,17 +175,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── LAZY YOUTUBE ───
     const ytContainer = document.getElementById('ytContainer');
     if (ytContainer) {
-        ytContainer.style.cursor = 'pointer';
         ytContainer.addEventListener('click', () => {
             const videoId = ytContainer.getAttribute('data-videoid');
             const iframe = document.createElement('iframe');
-            iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
+            iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1';
             iframe.title = 'Speeddansys ERP Demo';
             iframe.setAttribute('frameborder', '0');
             iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
             iframe.setAttribute('allowfullscreen', '');
             iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
             ytContainer.innerHTML = '';
+            ytContainer.style.paddingBottom = '';
             ytContainer.appendChild(iframe);
         });
     }

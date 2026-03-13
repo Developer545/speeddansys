@@ -2123,3 +2123,180 @@ img {
         font-size: 1.2rem;
     }
 }
+
+/* ─── LAZY YOUTUBE OVERLAY ─── */
+.yt-container {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.yt-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.42);
+    transition: background 0.3s ease;
+}
+
+.yt-container:hover .yt-play-overlay {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.yt-play-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.6rem;
+    padding-left: 5px;
+    box-shadow: 0 0 0 8px rgba(244, 121, 32, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.yt-container:hover .yt-play-btn {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 14px rgba(244, 121, 32, 0.2);
+}
+
+.yt-play-label {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* ─── BREAKPOINT 480px (móviles pequeños) ─── */
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.85rem;
+    }
+
+    .hero p {
+        font-size: 0.95rem;
+    }
+
+    .hero-ctas {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hero-ctas .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stats-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .stat-item {
+        padding: 16px 8px;
+    }
+
+    .stat-number {
+        font-size: 1.6rem;
+    }
+
+    .solutions-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .solution-card {
+        padding: 18px 14px;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .cta-btns {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .cta-btns .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dl-compare-bar {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .dl-compare-sep {
+        display: none;
+    }
+
+    .platform-bar {
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .addons-row {
+        gap: 10px;
+    }
+
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── CAROUSEL — Easing Premium ─── */
+.carousel-track {
+    transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* ─── STATS — 2×2 en tablet ─── */
+@media (max-width: 640px) {
+    .stats-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+    }
+
+    .stat-item {
+        border-right: 1px solid rgba(255,255,255,0.06);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .stat-item:nth-child(2n) {
+        border-right: none;
+    }
+
+    .stat-item:nth-child(3),
+    .stat-item:nth-child(4) {
+        border-bottom: none;
+    }
+}
+
+/* ─── TESTIMONIALS — 2 cols en tablet ─── */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr 1fr;
+        max-width: 860px;
+        margin: 0 auto;
+    }
+
+    .testimonial-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+}
